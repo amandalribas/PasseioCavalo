@@ -1,16 +1,28 @@
-import Control.Monad (when)
 -- ghci app.hs   
 --main
 
--- ASSINATURAS
+type Coordenada = (Int, Int)
+
+type Caminho = [Coordenada]
 
 
---type Posicao :: (Int, Int)
---type Caminho :: [Posicao]
+movimentos :: Caminho
+movimentos = [(2,1), (2,-1), (-2,1), (-2,-1), (1,2), (1,-2), (-1,2), (-1,-2)]
 
+movCandiadatos :: Coordenada -> Caminho
+movCandiadatos (i,j) = [ (i + x, j + y ) | (x, y) <- movimentos]
 
-verificaEntrada :: Int -> Int -> Int -> Int -> Bool
-verificaEntrada n m i j  = (i <= n) && (j <= m)
+verificaPosicao :: Int -> Int -> Coordenada -> Bool
+verificaPosicao n m (i, j)  = (i <= n) && (j <= m)
+
+total :: Int -> Int -> Int
+total n m = n * m
+
+verificaCompleto :: Int -> Int -> Caminho -> Bool
+verificaCompleto n m caminho = length caminho == total n m 
+
+candidatosPossiveis :: Int -> Int -> Coordenada -> Caminho
+candidatosPossiveis n m coord = 
 
 acessaLinha :: [String] -> IO ()
 acessaLinha[] = return() --se vazio fim
@@ -18,13 +30,16 @@ acessaLinha(atual: resto) = do --senao percorre 1 por vez
     let linha = map read (words atual) :: [Int]
     case linha of
         [n,m,i,j] -> do
-           putStrLn ("Dimensao: " ++ show n ++ " x " ++ show m)
-           putStrLn ("Posicao Inicial do Cavalo: [" ++ show i ++ "," ++ show j ++ "]")
-           when (verificaEntrada n m i j) $ do
-            putStrLn "Entrada Válida"
-            --- CODIGO DE EXECUCAO
-            ----------
-            ----------
+        
+           if ((verificaPosicao n m (i,j)) && (total n m /= 0))
+            then do
+                putStrLn ("A linha com os parametros " ++ show n ++ " " ++ show m ++  " " ++ show i ++ " " ++ show j ++ " é VÁLIDA.")
+                
+                --putStrLn ("Executando...")
+
+
+            else putStrLn ("A linha com os parametros " ++ show n ++ " " ++ show m ++  " " ++ show i ++ " " ++ show j ++ " é INVÁLIDA.")
+         
            acessaLinha resto
         
 
