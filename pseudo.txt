@@ -1,0 +1,63 @@
+Estruturas de Dados
+
+
+    Coordenada: (Int, Int): Representa uma posição (linha, coluna).
+    Caminho: [Coordenada]: Uma lista que armazena a sequencia de movimentos realizados.
+
+Funções Auxilares
+
+    total: Calcula o número total de casas (NM).
+    
+    movimentos: Lista fixa dos 8 deslocamentos que o cavalo pode fazer.
+    
+    movCandidatos: Gera as 8 coordenadas de destino a partir da posição atual, sem verificar se estão no tabuleiro ou foram visitadas.
+    
+    verificaPosicao: Verifica se uma coordenada está dentro dos limites do tabuleiro.
+    
+    verificaCompleto: Verifica se o tabuleiro já foi preenchido por completo, a partir do tamanho do array, que deve ser igual ao total de casas.
+
+    coordValida: Um movimento é válido se estiver no tabuleiro e não tiver sido visitado
+
+    chegaNoInicio: Usada no final do passeio, verifica se o ponto final pode se conectar ao ponto inicial. Se puder, o passeio é fechado, entao função retorna True.
+
+
+Otimização: Heurística de Warnsdorff
+
+
+    contaMovimentos:
+        Implementa o critério de Warnsdorff. Calcula quantas saídas válidas (não visitadas) uma posição tem.
+
+        -- As casas ainda não visitadas que são atingiveis da casa atual do cavalo são avaliadas segundo a quantidade de casas não visitadas que poderão ser atingidas, no passo seguinte, a partir de cada uma delas. ́E escolhida, então, aquela que minimizar essa quantidade
+
+    candidatosComHeuristica:
+        Pega todos os movimentos válidos e os ordena pela Heurística de Warnsdorff.
+         Cria pares (contagem, coordenada) usando contaMovimentos.
+         Usa sortBy comparando o primeiro elemento da tupla para ordenar: o candidato com a menor contagem de saídas (o mais restritivo) é colocado em primeiro lugar.
+         O resultado final é uma lista de movimentos onde o próximo movimento mais "inteligente" está sempre no topo.
+
+
+    A busca utiliza a lista ordenada por Warnsdorff para decidir o próximo passo.
+
+    buscaDFSWarnsdorff:
+        Função Auxiliar de Backtracking: Tenta cada candidato (c) na lista.
+        Se a lista de candidatos esgotar ([]), retorna Nothing (beco sem saída), acionando o backtracking.
+        Se a chamada recursiva (fazOLNVezes) retornar Just solucao, propaga o sucesso imediatamente.
+        Se a chamada recursiva falhar (Nothing), tenta o próximo candidato na lista (cs).
+
+    fazOLNVezes:
+        Função Principal: Responsável por dar o passo e verificar as condições de parada.
+        Passo: Adiciona coordAtual ao caminhoAtual.
+        Condição de Sucesso: Se verificaCompleto for verdadeiro: checa se é um Passeio Aberto usando chegaNoInicio. Se for aberto, reverte o caminho (que foi construído ao contrário) e retorna Just [Caminho]. Caso contrário, falha (Nothing).
+        Passo Recursivo: Obtém a lista de candidatos ordenada por Warnsdorff e chama buscaDFSWarnsdorff para explorar o melhor caminho a seguir.
+
+
+Funções de I/O
+
+    resolveCavalo: 
+        Recebe os parâmetros do tabuleiro e da posição inicial, verifica se a posição é válida, e inicia a busca chamando fazOLNVezes. Imprime o resultado formatado.
+    
+    acessaLinha: 
+        Função recursiva que lê as linhas do arquivo de entrada. Tenta converter cada linha em quatro inteiros (N, M, I, J) e chama resolveCavalo. Lida com a recursão para processar a linha restante (resto).
+    
+    main: 
+        A função que executa o programa. Lê o conteúdo do arquivo exemplo.txt, divide-o em linhas (lines) e passa as linhas para acessaLinha para iniciar o processamento.

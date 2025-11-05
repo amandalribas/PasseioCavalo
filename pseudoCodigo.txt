@@ -40,3 +40,6 @@ Função princial do passeio
 saindo da função verfica se a lista está vazia (retorna que não foi possível encontrar caminhos) ou imprime todos caso não esteja
     
 LISTA AUXILIAR DE LISTA DE TUPLAS -- VARIOS CAMINHOS
+
+
+--salva o inicio e fim para nao perder a primeira posicao
