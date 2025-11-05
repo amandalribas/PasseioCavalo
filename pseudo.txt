@@ -1,7 +1,8 @@
-Estruturas de Dados
+Estruturas
 
 
     Coordenada: (Int, Int): Representa uma posição (linha, coluna).
+    
     Caminho: [Coordenada]: Uma lista que armazena a sequencia de movimentos realizados.
 
 Funções Auxilares
@@ -38,7 +39,7 @@ Otimização: Heurística de Warnsdorff
 
     A busca utiliza a lista ordenada por Warnsdorff para decidir o próximo passo.
 
-    buscaDFSWarnsdorff:
+    buscaHeuristica:
         Função Auxiliar de Backtracking: Tenta cada candidato (c) na lista.
         Se a lista de candidatos esgotar ([]), retorna Nothing (beco sem saída), acionando o backtracking.
         Se a chamada recursiva (fazOLNVezes) retornar Just solucao, propaga o sucesso imediatamente.
@@ -48,7 +49,7 @@ Otimização: Heurística de Warnsdorff
         Função Principal: Responsável por dar o passo e verificar as condições de parada.
         Passo: Adiciona coordAtual ao caminhoAtual.
         Condição de Sucesso: Se verificaCompleto for verdadeiro: checa se é um Passeio Aberto usando chegaNoInicio. Se for aberto, reverte o caminho (que foi construído ao contrário) e retorna Just [Caminho]. Caso contrário, falha (Nothing).
-        Passo Recursivo: Obtém a lista de candidatos ordenada por Warnsdorff e chama buscaDFSWarnsdorff para explorar o melhor caminho a seguir.
+        Passo Recursivo: Obtém a lista de candidatos ordenada por Warnsdorff e chama buscaHeuristica para explorar o melhor caminho a seguir.
 
 
 Funções de I/O

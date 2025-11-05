@@ -83,11 +83,11 @@ resolveCavalo n m i j = do
     let inicio = (i,j)
     if verificaPosicao n m inicio && total n m /= 0
         then do
-            putStrLn ("\nTabuleiro: " ++ show n ++ "x" ++ show m ++ "posicao inicial: " ++ show inicio )
+            putStrLn ("\nTabuleiro: " ++ show n ++ "x" ++ show m ++ " posicao inicial: " ++ show inicio )
             case fazOLNVezes n m inicio [] of 
                 Just caminho -> do
                     print caminho
-                Nothing -> putStrLn "Resultado: Nenhuma solução encontrada."
+                Nothing -> putStrLn "Nenhuma solução encontrada."
         else 
             putStrLn ( "\nEntrada Inválida: " ++ show n ++ " " ++ show m ++ " " ++ show i ++ " " ++ show j)
 
@@ -103,6 +103,7 @@ acessaLinha (atual: resto) = do
         _ -> do
             putStrLn "\nERRO! Formato de linha incorreto, formato esperado: n m i j"
             acessaLinha resto
+
 
 main :: IO () 
 main = do
