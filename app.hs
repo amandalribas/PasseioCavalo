@@ -4,36 +4,36 @@
 import Data.List (sortBy)
 import Data.Ord (comparing)
 
-type Coordenada = (Int, Int)
-type Caminho = [Coordenada]
+type Coordenada = (Int, Int) --Amanda
+type Caminho = [Coordenada] -- Amanda
 
-total :: Int -> Int -> Int
+total :: Int -> Int -> Int 
 total n m = n * m
 
-movimentos :: Caminho
+movimentos :: Caminho -- Amanda
 movimentos = [(2,1), (2,-1), (-2,1), (-2,-1), (1,2), (1,-2), (-1,2), (-1,-2)]
 
-movCandidatos :: Coordenada -> Caminho
+movCandidatos :: Coordenada -> Caminho -- Amanda/Madu
 movCandidatos (i,j) = [ (i + x, j + y ) | (x, y) <- movimentos]
 
-verificaPosicao :: Int -> Int -> Coordenada -> Bool
+verificaPosicao :: Int -> Int -> Coordenada -> Bool  -- Amanda/Madu
 verificaPosicao n m (i, j) = (i >= 1) && (i <= n) && (j >= 1) && (j <= m) 
 
-verificaCompleto :: Int -> Int -> Caminho -> Bool
+verificaCompleto :: Int -> Int -> Caminho -> Bool -- Madu
 verificaCompleto n m caminho = length caminho == total n m 
 
-coordValida :: Int -> Int -> Coordenada -> Caminho -> Bool
+coordValida :: Int -> Int -> Coordenada -> Caminho -> Bool -- Madu
 coordValida n m candidato caminhoAtual = 
     verificaPosicao n m candidato && not (elem candidato caminhoAtual)
 
-chegaNoInicio :: Coordenada -> Coordenada -> Bool
+chegaNoInicio :: Coordenada -> Coordenada -> Bool -- Amanda/Madu
 chegaNoInicio atual inicio = inicio `elem` movCandidatos atual
 
-contaMovimentos :: Int -> Int -> Caminho -> Coordenada -> Int
+contaMovimentos :: Int -> Int -> Caminho -> Coordenada -> Int --Madu
 contaMovimentos n m caminhoAtual pos =
-    length (filter (\proxPos -> coordValida n m proxPos caminhoAtual) (movCandidatos pos))
+    length (filter (\proxPos -> coordValida n m proxPos caminhoAtual)  (movCandidatos pos))
 
-candidatosComHeuristica :: Int -> Int -> Coordenada -> Caminho -> Caminho
+candidatosComHeuristica :: Int -> Int -> Coordenada -> Caminho -> Caminho -- Madu
 candidatosComHeuristica n m coordAtual caminhoAtual =
     let 
         candidatosValidos = 
@@ -51,14 +51,14 @@ candidatosComHeuristica n m coordAtual caminhoAtual =
         map snd candidatosOrdenados
 
 
-buscaHeuristica :: Int -> Int -> [Coordenada] -> Caminho -> Maybe Caminho
+buscaHeuristica :: Int -> Int -> [Coordenada] -> Caminho -> Maybe Caminho -- Lais
 buscaHeuristica _ _ [] _ = Nothing
 buscaHeuristica n m (c:cs) caminhoCompleto =
     case fazOLNVezes n m c caminhoCompleto of
        Just solucao -> Just solucao          
        Nothing -> buscaHeuristica n m cs caminhoCompleto
 
-fazOLNVezes :: Int -> Int -> Coordenada -> Caminho -> Maybe Caminho
+fazOLNVezes :: Int -> Int -> Coordenada -> Caminho -> Maybe Caminho -- Lais
 fazOLNVezes n m coordAtual caminhoAtual =
     let
         caminhoCompleto = coordAtual : caminhoAtual
@@ -78,16 +78,17 @@ fazOLNVezes n m coordAtual caminhoAtual =
                     buscaHeuristica n m candidatos caminhoCompleto
 
 
+--------------------------------- funcoes de visualização (Amanda)
 resolveCavalo :: Int -> Int -> Int -> Int -> IO ()
 resolveCavalo n m i j = do
     let inicio = (i,j)
     if verificaPosicao n m inicio && total n m /= 0
         then do
             putStrLn ("\nTabuleiro: " ++ show n ++ "x" ++ show m ++ " posicao inicial: " ++ show inicio )
-            case fazOLNVezes n m inicio [] of 
+            case fazOLNVezes n m inicio [] of --comeca com um caminho vazio 
                 Just caminho -> do
                     print caminho
-                Nothing -> putStrLn "Nenhuma solução encontrada."
+                Nothing -> putStrLn "Nenhuma solução encontrada." --recebe "nada" pelo maybe
         else 
             putStrLn ( "\nEntrada Inválida: " ++ show n ++ " " ++ show m ++ " " ++ show i ++ " " ++ show j)
 
@@ -95,8 +96,8 @@ resolveCavalo n m i j = do
 acessaLinha :: [String] -> IO ()
 acessaLinha [] = return ()
 acessaLinha (atual: resto) = do
-    let talvezLinha = map read (words atual) :: [Int]
-    case talvezLinha of
+    let linha = map read (words atual) :: [Int]
+    case linha of
         [n,m,i,j] -> do
             resolveCavalo n m i j
             acessaLinha resto
